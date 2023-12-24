@@ -26,6 +26,11 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
+        tls:
+          cert_file: /etc/cert.pem
+          key_file: /etc/cert-key.pem
+        auth:
+          authenticator: oidc/keycloak
       http:
         endpoint: 0.0.0.0:4318
   jaeger:
@@ -63,8 +68,8 @@ receivers:
 
 processors:
   batch:
-    send_batch_size: 10000
-    send_batch_max_size: 11000
+    send_batch_size: 40000
+    send_batch_max_size: 50000
     timeout: 10s
   signozspanmetrics/prometheus:
     metrics_exporter: prometheus
@@ -106,6 +111,10 @@ extensions:
     endpoint: 0.0.0.0:55679
   pprof:
     endpoint: 0.0.0.0:1777
+  oidc/keycloak:
+    issuer_url: https://keycloak.com:1443/realms/opentelemetry
+    audience: operation_collector
+    attribute: authorization
 
 exporters:
   clickhousetraces:
@@ -142,6 +151,7 @@ service:
     - health_check
     - zpages
     - pprof
+    - oidc/keycloak
   pipelines:
     traces:
       receivers: [jaeger, otlp]

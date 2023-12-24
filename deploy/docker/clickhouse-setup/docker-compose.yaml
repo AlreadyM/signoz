@@ -243,6 +243,9 @@ services:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
       - ./otel-collector-opamp-config.yaml:/etc/manager-config.yaml
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /home/signoz/trace-storage/pem/signoz-collector-trace/signoz-collector-cert.pem:/etc/cert.pem
+      - /home/signoz/trace-storage/pem/signoz-collector-trace/signoz-collector-cert-key.pem:/etc/cert-key.pem
+      - /home/signoz/trace-storage/pem/keycloak/keycloak-ca.pem:/etc/ssl/certs/keycloak-for-signoz-collector.pem
     environment:
       - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-host,os.type=linux
       - DOCKER_MULTI_NODE_CLUSTER=false
