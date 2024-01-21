@@ -48,6 +48,7 @@ services:
   zookeeper-1:
     image: bitnami/zookeeper:3.7.1
     container_name: signoz-zookeeper-1
+    restart: on-failure
     hostname: zookeeper-1
     user: root
     ports:
